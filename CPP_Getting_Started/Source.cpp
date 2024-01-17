@@ -25,5 +25,4 @@ int main() {
 
 	//Print updated variables
 	std::cout << "num1 = \"" << num1 << "\" num2 = \"" << num2 << "\" num3 = \"" << num3 << "\"" << std::endl;
-
 }
