@@ -133,6 +133,7 @@
     <ClCompile Include="Schmitt_FINAL.cpp" />
     <ClCompile Include="UI\Menu.cpp" />
     <ClCompile Include="UI\MenuItem.cpp" />
+    <ClCompile Include="UI\MenuOption.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ItemParser.hpp" />
@@ -141,6 +142,7 @@
     <ClInclude Include="Item.hpp" />
     <ClInclude Include="UI\Menu.hpp" />
     <ClInclude Include="UI\MenuItem.hpp" />
+    <ClInclude Include="UI\MenuOption.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

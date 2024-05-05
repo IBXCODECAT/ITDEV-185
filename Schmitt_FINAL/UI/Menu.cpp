@@ -1,17 +1,18 @@
 #include "Menu.hpp"
+#include "MenuOption.hpp"
+
 #include <iostream>
 #include <thread>
 #include <limits>
 #include <chrono>
-#include <stack> // Include stack for managing menu layers
 
-constexpr auto ERROR_DISPLAY_TIME_MS = 1500;
+constexpr auto ERROR_DISPLAY_TIME_MS = 1000;
 
 Menu::Menu() {
     root = new MenuItem("Root");
     current = root;
     previous = nullptr;
-    menuStack.push(root); // Push root menu onto the stack
+    menuStack.push(root);
 }
 
 Menu::~Menu() {
@@ -21,6 +22,11 @@ Menu::~Menu() {
 void Menu::addChild(std::string label) {
     MenuItem* child = new MenuItem(label);
     current->children.push_back(child);
+}
+
+void Menu::addOption(std::string label, MenuOption::Callback cb) {
+    MenuOption* option = new MenuOption(label, cb);
+    current->children.push_back(option);
 }
 
 void Menu::display() {
@@ -33,23 +39,22 @@ void Menu::display() {
     std::cout << "Current Menu: " << current->label << std::endl;
     int index = 1;
 
-    // Display "Go Back" as the first option if there's a previous menu
     if (menuStack.size() > 1) {
         std::cout << "[0] Go Back" << std::endl;
         index++;
     }
-    else
-    {
-        std::cout << "[0] Exit" << std::endl;
-    }
 
     for (MenuItem* child : current->children) {
+        
+        if (child->isOption())
+        {
+            std::cout << '[' << index << "] Option - " << child->label << std::endl;
+        }
+        else
+        {
+            std::cout << '[' << index << "] Menu - " << child->label << std::endl;
+        }
 
-        unsigned short DISPLAY_INDEX = index;
-
-        if (menuStack.size() > 1) DISPLAY_INDEX--; // Adjust the display index if "Go Back" is displayed
-
-        std::cout << '[' << DISPLAY_INDEX << "] " << child->label << std::endl;
         index++;
     }
 }
@@ -58,26 +63,16 @@ void Menu::navigate(int choice) {
     if (std::cin.fail()) {
         std::cin.clear();
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-
         printError("Invalid input. Please enter a number corresponding to a menu option.");
         std::this_thread::sleep_for(std::chrono::milliseconds(ERROR_DISPLAY_TIME_MS));
-
         return;
     }
 
     if (choice == 0 && menuStack.size() > 1) {
-        menuStack.pop(); // Pop the current menu from the stack
-        current = menuStack.top(); // Update the current menu to the one on top of the stack
-        previous = menuStack.size() > 1 ? menuStack.top() : nullptr; // Update previous menu if applicable
-    }
-    else if(choice == 0 && menuStack.size() == 1)
-    {
-        return exit(0);
+        goBack();
     }
     else if (choice >= 1 && choice <= current->children.size()) {
-        previous = current;
-        current = current->children[choice - 1];
-        menuStack.push(current); // Push the selected menu onto the stack
+        processOption(choice);
     }
     else {
         printError("Invalid choice! Please enter a valid number corresponding to a menu option.");
@@ -85,9 +80,7 @@ void Menu::navigate(int choice) {
     }
 }
 
-#ifdef _WIN32
-#include <windows.h>
-#endif
+#include "Windows.h";
 
 void Menu::printError(const std::string message) {
 #ifdef _WIN32
@@ -101,9 +94,21 @@ void Menu::printError(const std::string message) {
 }
 
 void Menu::goBack() {
-    if (menuStack.size() > 1) {
-        menuStack.pop(); // Pop the current menu from the stack
-        current = menuStack.top(); // Update the current menu to the one on top of the stack
-        previous = menuStack.size() > 1 ? menuStack.top() : nullptr; // Update previous menu if applicable
+    menuStack.pop();
+    current = menuStack.top();
+    previous = menuStack.size() > 1 ? menuStack.top() : nullptr;
+}
+
+void Menu::processOption(int choice) {
+    MenuItem* selected = current->children[choice - 1];
+    if (selected->isOption()) {
+        MenuOption* option = static_cast<MenuOption*>(selected);
+        std::cout << "You selected: " << option->label << std::endl;
+        option->executeCallback(); // Execute callback associated with the option
+    }
+    else {
+        previous = current;
+        current = selected;
+        menuStack.push(current);
     }
 }

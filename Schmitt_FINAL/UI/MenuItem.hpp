@@ -2,8 +2,8 @@
 #ifndef MENUITEM_H
 #define MENUITEM_H
 
-#include <vector>
 #include <string>
+#include <vector>
 
 class MenuItem {
 public:
@@ -11,7 +11,8 @@ public:
     std::vector<MenuItem*> children;
 
     MenuItem(std::string lbl);
-    ~MenuItem();
+    virtual ~MenuItem(); // Add virtual destructor
+    virtual bool isOption() const { return false; } // Add a virtual function to check if it's an option
 };
 
 #endif // MENUITEM_H

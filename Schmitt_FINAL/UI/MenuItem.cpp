@@ -1,9 +1,10 @@
 #include "MenuItem.hpp"
+#include "MenuOption.hpp"
 
 MenuItem::MenuItem(std::string lbl) : label(lbl) {}
 
 MenuItem::~MenuItem() {
-    for (MenuItem* child : children) {
+    for (auto child : children) {
         delete child;
     }
 }

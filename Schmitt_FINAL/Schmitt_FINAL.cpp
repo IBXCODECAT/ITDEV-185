@@ -13,37 +13,62 @@
 using namespace std;
 using json = nlohmann::json;
 
+
+void option1Callback() {
+    cout << "Option 1 selected" << endl;
+    exit(0);
+}
+
+void option2Callback() {
+    cout << "Option 2 selected" << endl;
+    exit(0);
+}
+
+void option3Callback() {
+    cout << "Option 3 selected" << endl;
+    exit(0);
+}
+
+void option4Callback() {
+    cout << "Option 4 selected" << endl;
+    exit(0);
+}
+
+void ConstructMenu(Menu& menu) {
+	menu.addChild("Shopping Mode");
+	menu.addChild("Store Mode");
+
+	menu.navigate(1); // Navigate to the first child
+
+	menu.addChild("Add item(s) to Cart");
+	menu.addChild("Remove item(s) from Cart");
+	menu.addChild("List all availible products");
+	menu.addChild("Finish & Pay");
+
+	menu.navigate(1); // Navigate to the first child
+	menu.addChild("Scan by Id");
+	menu.addChild("Scan by Name");
+
+	menu.goBack();
+
+	menu.goBack(); // Go back to the parent menu
+	menu.navigate(2); // Navigate to the second child
+
+    menu.addOption("Update product metadata (eg. Price, Discounts, etc)", option1Callback);
+    menu.addOption("Create a product.", option2Callback);
+    menu.addOption("Delete a product.", option3Callback);
+    menu.addOption("Save my changes.", option4Callback);
+
+	menu.goBack();
+}
+
 int main() {
     
     Menu menu;
 
     bool exitSystem = false;
     
-    menu.addChild("Shopping Mode");
-    menu.addChild("Store Mode");
-
-    menu.navigate(1); // Navigate to the first child
-
-    menu.addChild("Add item(s) to Cart");
-    menu.addChild("Remove item(s) from Cart");
-    menu.addChild("List all availible products");
-    menu.addChild("Finish & Pay");
-
-    menu.navigate(1); // Navigate to the first child
-    menu.addChild("Scan by Id");
-    menu.addChild("Scan by Name");
-
-    menu.goBack();
-
-    menu.goBack(); // Go back to the parent menu
-    menu.navigate(2); // Navigate to the second child
-
-    menu.addChild("Create a product.");
-    menu.addChild("Update product metadata (eg. Price, Discounts, etc)");
-    menu.addChild("Delete a product");
-    menu.addChild("Save my changes");
-
-    menu.goBack();
+    ConstructMenu(menu);
 
     int choice;
 
