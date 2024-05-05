@@ -1,18 +1,18 @@
-#pragma once
-#ifndef JSONOBJECT_H
-#define JSONOBJECT_H
+#ifndef ITEM_H
+#define ITEM_H
 
 #include <string>
 #include "json.hpp"
 
 class Item {
 public:
+    char itemName[100]; // Assuming a maximum length of 100 characters for the item name
     int stockCount;
     double itemPrice;
     double itemDiscountPrice;
 
     Item();
-    Item(int stockCount, double itemPrice, double itemDiscountPrice);
+    Item(const char* itemName, int stockCount, double itemPrice, double itemDiscountPrice);
 
     void fromJson(const std::string& jsonString);
     std::string toJson() const;
