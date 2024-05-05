@@ -12,6 +12,7 @@ public:
     static void addItems();
     static void removeItems();
     static void listItems();
+    static void finishAndPay();
 };
 
 #endif // SHOPPINGMANAGER_H

@@ -18,7 +18,7 @@ void ShoppingManager::addItems()
         std::cout << "Added " << itemCount << " " << itemName << "(s) to the cart." << std::endl;
     }
     else {
-        std::cout << "Item not found!" << std::endl;
+        std::cout << "Item not found! Try checking the list of availible items or adding an item yourself in STORE MODE!" << std::endl;
     }
 }
 
@@ -39,4 +39,9 @@ void ShoppingManager::removeItems() {
 void ShoppingManager::listItems()
 {
     Cart::displayCart();
+}
+
+void ShoppingManager::finishAndPay()
+{
+	Cart::printReceipt();
 }

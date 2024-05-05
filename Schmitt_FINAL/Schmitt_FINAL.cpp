@@ -8,7 +8,6 @@
 #include "json.hpp"
 #include "Item.hpp"
 #include "ItemParser.hpp"
-#include "ItemsManager.hpp"
 #include "ProductManager.hpp"
 #include "ShoppingManager.hpp"
 #include "./UI/Menu.hpp"
@@ -84,10 +83,24 @@ static void cartItemRemoveWrapper()
 	waitForInput();
 }
 
+/// <summary>
+/// Synchronous callback wrapper for the ShoppingManager::finishAndPay() function
+/// This function is used to effectively wrap the asynchronous function call in a synchronous one
+/// </summary>
 static void finishAndPayWrapper()
 {
 	MenuProgressionEnabled = false;
-	waitForInput();
+    ShoppingManager::finishAndPay();
+
+    waitForInput();
+
+    // Here we save the products to the file after the user has finished shopping in oreder to update the stock counts
+    ProductManager::saveProducts();
+
+    cout << "\n\nThank you for shopping with us! Have a great day!\n\n";
+
+    // When we finish shopping, we exit the application
+    exit(1);
 }
 
 /// <summary>
@@ -127,7 +140,7 @@ static void deleteProductWrapper()
 /// Syncrhonous callback wrapper for the ProductManager::SaveProducts() function
 /// This function is used to effectively wrap the asynchronous function call in a synchronous one
 /// </summary>
-static void oCallbackSaveProducts()
+static void saveProductsWrapper()
 {
     MenuProgressionEnabled = true;
     ProductManager::saveProducts();
@@ -148,7 +161,7 @@ static void ConstructMenu()
     menu.addOption("Add item(s) to the cart.", cartItemAddWrapper);
     menu.addOption("Remove item(s) from the cart.", cartItemRemoveWrapper);
     menu.addOption("List all availible products.", listProductsWrapper);
-    menu.addOption("Finish & Pay.", waitForInput);
+    menu.addOption("Finish & Pay.", finishAndPayWrapper);
 
 	menu.goBack(); // Navigate back to SHOPPING MODE
 	menu.goBack(); // Navigate back to the root menu
@@ -159,7 +172,7 @@ static void ConstructMenu()
     menu.addOption("Create a product.", createProductWrapper);
     menu.addOption("Update product metadata (eg. Price, Discounts, etc).", updateProductWrapper);
     menu.addOption("Delete a product.", deleteProductWrapper);
-    menu.addOption("Save my changes.", oCallbackSaveProducts);
+    menu.addOption("Save my changes.", saveProductsWrapper);
 
 	menu.goBack();
 }

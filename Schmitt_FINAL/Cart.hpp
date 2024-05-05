@@ -19,6 +19,8 @@ public:
 
     // Method to display the items in the cart
     static void displayCart();
+
+    static void printReceipt();
 };
 
 #endif // CART_H
