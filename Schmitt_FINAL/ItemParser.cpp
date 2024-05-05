@@ -1,6 +1,8 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <vector>
+#include <Windows.h>
 
 #include "Item.hpp"
 #include "ItemParser.hpp"
@@ -99,6 +101,75 @@ void ItemParser::writeToFile(const Item& obj) {
 
     // Write the JSON data to the file
     json jsonData = json::parse(obj.toJson());
+
     file << jsonData;
     file.close();
+}
+
+std::vector<Item> ItemParser::readAllItems() {
+    // Ensure the items directory exists
+    ensureItemsDirectoryExists();
+
+    std::vector<Item> allItems;
+    
+    // Construct the search path for all .item files in the items directory
+    std::string searchPath = ITEMS_SUBDIRECTORY;
+    searchPath += "/*.item";
+
+    // Find the first file in the directory
+    WIN32_FIND_DATAA fileData;
+
+    HANDLE hFind = FindFirstFileA(searchPath.c_str(), &fileData);
+    if (hFind == INVALID_HANDLE_VALUE) {
+        std::cerr << "Error opening directory: " << ITEMS_SUBDIRECTORY << std::endl;
+        return allItems;
+    }
+
+    // Read each file in the directory
+    do {
+        if (fileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
+            continue; // Skip directories
+        }
+        std::string filename = fileData.cFileName;
+        std::string itemName = filename.substr(0, filename.find_last_of('.'));
+
+        // Read item from file and add to allItems vector
+        Item item = readFromFile(itemName);
+        allItems.push_back(item);
+    } while (FindNextFileA(hFind, &fileData) != 0);
+
+    // Close the search handle
+    FindClose(hFind);
+
+    return allItems;
+}
+
+void ItemParser::purgeItemsDirectory() {
+    std::string directoryPath = "items";
+
+    WIN32_FIND_DATAA fileData;
+    HANDLE hFind = FindFirstFileA((directoryPath + "\\*").c_str(), &fileData);
+
+    if (hFind != INVALID_HANDLE_VALUE) {
+        do {
+            const std::string filename = fileData.cFileName;
+            if (filename != "." && filename != "..") {
+                const std::string filePath = directoryPath + "\\" + filename;
+                std::cout << "Removing file: " << filePath << std::endl;
+                if (DeleteFileA(filePath.c_str()) == 0) {
+                    std::cerr << "Error deleting file: " << filePath << std::endl;
+                }
+                else {
+                    std::cout << "Removed file: " << filePath << std::endl;
+                }
+            }
+        } while (FindNextFileA(hFind, &fileData) != 0);
+
+        FindClose(hFind);
+    }
+    else {
+        std::cerr << "Error opening directory: " << directoryPath << std::endl;
+    }
+
+    std::cout << "Items directory cleared." << std::endl;
 }

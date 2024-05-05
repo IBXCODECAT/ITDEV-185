@@ -129,10 +129,12 @@
   <ItemGroup>
     <ClCompile Include="Item.cpp" />
     <ClCompile Include="ItemParser.cpp" />
+    <ClCompile Include="ItemsManager.cpp" />
     <ClCompile Include="Schmitt_FINAL.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ItemParser.hpp" />
+    <ClInclude Include="ItemsManager.hpp" />
     <ClInclude Include="json.hpp" />
     <ClInclude Include="Item.hpp" />
   </ItemGroup>
