@@ -10,7 +10,8 @@
 #include "ItemParser.hpp"
 #include "ItemsManager.hpp"
 #include "ProductManager.hpp"
-#include "./UI/Menu.hpp";
+#include "ShoppingManager.hpp"
+#include "./UI/Menu.hpp"
 
 // Define constants
 constexpr bool DEBUG_FLAG = false;
@@ -35,24 +36,65 @@ static void waitForInput() {
     std::cin.get(); // Wait for user to press any key
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Clear input buffer
     
-    // If the DEBUG_FLAG is set to false, allow the user to continue
+    // If the DEBUG_FLAG is not raised, allow the user to continue to navigate the menus
     if (!DEBUG_FLAG) MenuProgressionEnabled = true;
 }
 
 /// <summary>
 /// Synchronous callback wrapper for the ProductManager::listProducts() function
+/// This function is used to effectively wrap the asynchronous function call in a synchronous one
 /// </summary>
-static void oCallbackWrapperListProducts()
+static void listProductsWrapper()
 {
-	MenuProgressionEnabled = false;
-	ProductManager::listProducts();
+    MenuProgressionEnabled = false;
+    ProductManager::listProducts();
     waitForInput();
 }
 
 /// <summary>
-/// Synchronous callback wrapper for the ProductManager::addProduct() function
+/// Synchronous callback wrapper for the ShoppingManager::listItems() function
+/// This function is used to effectively wrap the asynchronous function call in a synchronous one
 /// </summary>
-static void oCallbackWrapperCreateProduct()
+static void cartDisplayWrapper()
+{
+	MenuProgressionEnabled = false;
+	ShoppingManager::listItems();
+	waitForInput();
+}
+
+/// <summary>
+/// Synchronous callback wrapper for the ShoppingManager::addItems() function
+/// This function is used to effectively wrap the asynchronous function call in a synchronous one
+/// </summary>
+static void cartItemAddWrapper()
+{
+	MenuProgressionEnabled = false;
+    ShoppingManager::addItems();
+	waitForInput();
+}
+
+/// <summary>
+/// Synchronous callback wrapper for the ShoppingManager::removeItems() function
+/// This function is used to effectively wrap the asynchronous function call in a synchronous one
+/// </summary>
+static void cartItemRemoveWrapper()
+{
+	MenuProgressionEnabled = false;
+    ShoppingManager::removeItems();
+	waitForInput();
+}
+
+static void finishAndPayWrapper()
+{
+	MenuProgressionEnabled = false;
+	waitForInput();
+}
+
+/// <summary>
+/// Synchronous callback wrapper for the ProductManager::addProduct() function
+/// This function is used to effectively wrap the asynchronous function call in a synchronous one
+/// </summary>
+static void createProductWrapper()
 { 
     MenuProgressionEnabled = false;
     ProductManager::addProduct();
@@ -61,8 +103,9 @@ static void oCallbackWrapperCreateProduct()
 
 /// <summary>
 /// Synchronous callback wrapper for the ProductManager::updateProduct() function
+/// This function is used to effectively wrap the asynchronous function call in a synchronous one
 /// </summary>
-static void oCallbackWrapperUpdateProduct()
+static void updateProductWrapper()
 {
     MenuProgressionEnabled = false;
     ProductManager::updateProduct();
@@ -71,8 +114,9 @@ static void oCallbackWrapperUpdateProduct()
 
 /// <summary>
 /// Syncrhonous callback wrapper for the ProductManager::removeProduct() function
+/// This function is used to effectivley wrap the asynchronous function call in a synchronous one
 /// </summary>
-static void oCallbackWrapperDeleteProduct()
+static void deleteProductWrapper()
 {
     MenuProgressionEnabled = true;
     ProductManager::removeProduct();
@@ -81,6 +125,7 @@ static void oCallbackWrapperDeleteProduct()
 
 /// <summary>
 /// Syncrhonous callback wrapper for the ProductManager::SaveProducts() function
+/// This function is used to effectively wrap the asynchronous function call in a synchronous one
 /// </summary>
 static void oCallbackSaveProducts()
 {
@@ -99,9 +144,10 @@ static void ConstructMenu()
     menu.addOption("Close Application", []() { exit(0); });
 
 	menu.navigate(1); // Navigate to ADD ITEM(S) TO CART
-    menu.addOption("Add item(s) to the cart.", waitForInput);
-    menu.addOption("Remove item(s) from the cart.", waitForInput);
-    menu.addOption("List all availible products.", waitForInput);
+    menu.addOption("View cart.", cartDisplayWrapper);
+    menu.addOption("Add item(s) to the cart.", cartItemAddWrapper);
+    menu.addOption("Remove item(s) from the cart.", cartItemRemoveWrapper);
+    menu.addOption("List all availible products.", listProductsWrapper);
     menu.addOption("Finish & Pay.", waitForInput);
 
 	menu.goBack(); // Navigate back to SHOPPING MODE
@@ -109,10 +155,10 @@ static void ConstructMenu()
 
 	menu.navigate(2); // Navigate to STORE MODE
 
-    menu.addOption("List all products.", oCallbackWrapperListProducts);
-    menu.addOption("Create a product.", oCallbackWrapperCreateProduct);
-    menu.addOption("Update product metadata (eg. Price, Discounts, etc)", oCallbackWrapperUpdateProduct);
-    menu.addOption("Delete a product.", oCallbackWrapperDeleteProduct);
+    menu.addOption("List all products.", listProductsWrapper);
+    menu.addOption("Create a product.", createProductWrapper);
+    menu.addOption("Update product metadata (eg. Price, Discounts, etc).", updateProductWrapper);
+    menu.addOption("Delete a product.", deleteProductWrapper);
     menu.addOption("Save my changes.", oCallbackSaveProducts);
 
 	menu.goBack();
@@ -151,40 +197,6 @@ int main()
         menu.navigate(choice);
     }
 
-    /*
-
-    Item obj;
-    
-    strcpy_s(obj.itemName, "Walking Stick");
-    obj.itemPrice = 12.94;
-    obj.itemDiscountPrice = 9.99;
-    obj.stockCount = 100;
-
-    Item obj2;
-
-    strcpy_s(obj2.itemName, "Egg");
-    obj2.itemPrice = 2.24;
-    obj2.itemDiscountPrice = 1.41;
-    obj2.stockCount = 12;
-
-    
-    ItemsManager::initialize();
-    ItemsManager::deleteAllItems();
-
-    ItemsManager::addItem(obj);
-    ItemsManager::addItem(obj2);
-
-    ItemsManager::saveItemsToFile();
-
-    cout << "Reading all items..." << endl;
-
-    std::vector<Item> items = ItemParser::readAllItems();
-
-    for (const Item& item : items) {
-		item.print();
-	}
-
-    */
-
+    // Exit the application (Unreachable and useless code here to prevent compiler warnings)
     return 0;
 }

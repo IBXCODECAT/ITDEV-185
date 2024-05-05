@@ -16,6 +16,13 @@ public:
     static void initialize(); // Initialize the items manager
 
     /// <summary>
+    /// Find an item in the global items vector by name
+    /// </summary>
+    /// <param name="itemName">The item namme to search for</param>
+    /// <returns>The item if found</returns>
+    static Item* findItem(const std::string& itemName);
+
+    /// <summary>
     /// Add an item to the global items vector
     /// </summary>
     /// <param name="item">The item to add</param>

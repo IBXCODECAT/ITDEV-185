@@ -18,6 +18,10 @@ public:
     std::string toJson() const;
 
     void print() const;
+
+    bool operator==(const Item& other) const {
+        return (this->itemName == other.itemName && this->stockCount == other.stockCount);
+    }
 };
 
 #endif // JSONOBJECT_H

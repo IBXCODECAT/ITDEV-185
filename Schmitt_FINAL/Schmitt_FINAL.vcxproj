@@ -127,21 +127,25 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Cart.cpp" />
     <ClCompile Include="Item.cpp" />
     <ClCompile Include="ItemParser.cpp" />
     <ClCompile Include="ItemsManager.cpp" />
     <ClCompile Include="ProductManager.cpp" />
     <ClCompile Include="Schmitt_FINAL.cpp" />
+    <ClCompile Include="ShoppingManager.cpp" />
     <ClCompile Include="UI\Menu.cpp" />
     <ClCompile Include="UI\MenuItem.cpp" />
     <ClCompile Include="UI\MenuOption.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Cart.hpp" />
     <ClInclude Include="ItemParser.hpp" />
     <ClInclude Include="ItemsManager.hpp" />
     <ClInclude Include="json.hpp" />
     <ClInclude Include="Item.hpp" />
     <ClInclude Include="ProductManager.hpp" />
+    <ClInclude Include="ShoppingManager.hpp" />
     <ClInclude Include="UI\Menu.hpp" />
     <ClInclude Include="UI\MenuItem.hpp" />
     <ClInclude Include="UI\MenuOption.hpp" />

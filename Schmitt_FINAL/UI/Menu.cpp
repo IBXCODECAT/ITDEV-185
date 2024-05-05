@@ -82,7 +82,7 @@ void Menu::navigate(int choice) {
     }
 }
 
-#include "Windows.h";
+#include "Windows.h"
 
 void Menu::printError(const std::string message) {
 #ifdef _WIN32

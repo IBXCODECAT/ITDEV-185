@@ -45,6 +45,12 @@
     <ClCompile Include="ProductManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Cart.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ShoppingManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="json.hpp">
@@ -69,6 +75,12 @@
       <Filter>Header Files\UI</Filter>
     </ClInclude>
     <ClInclude Include="ProductManager.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Cart.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ShoppingManager.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

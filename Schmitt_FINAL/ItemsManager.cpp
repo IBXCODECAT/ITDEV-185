@@ -8,6 +8,16 @@ void ItemsManager::initialize() {
     items = ItemParser::readAllItems();
 }
 
+Item* ItemsManager::findItem(const std::string& itemName) {
+    // Find and return the item with the specified name
+    for (auto& item : ItemsManager::items) {
+        if (item.itemName == itemName) {
+            return &item;
+        }
+    }
+    return nullptr; // Item not found
+}
+
 void ItemsManager::addItem(const Item& item) {
 
     // Add an item to the global items vector

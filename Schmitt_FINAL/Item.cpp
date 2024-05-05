@@ -1,4 +1,4 @@
-#include "Item.hpp";
+#include "Item.hpp"
 #include <cstring> // For strcpy
 #include <iostream>
 
