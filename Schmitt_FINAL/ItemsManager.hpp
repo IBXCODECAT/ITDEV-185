@@ -28,13 +28,6 @@ public:
     static void removeItem(const std::string& itemName);
 
     /// <summary>
-    /// Update an item in the global items vector by replacing it with the new item
-    /// NOTE: The item name must match the item to be updated
-    /// </summary>
-    /// <param name="item">The item to replace the previous item, must have the same name</param>
-    static void updateItem(const Item& item);
-
-    /// <summary>
     /// Get all items from the global items vector
     /// </summary>
     /// <returns>All saved items</returns>

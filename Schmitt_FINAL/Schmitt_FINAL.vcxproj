@@ -130,6 +130,7 @@
     <ClCompile Include="Item.cpp" />
     <ClCompile Include="ItemParser.cpp" />
     <ClCompile Include="ItemsManager.cpp" />
+    <ClCompile Include="ProductManager.cpp" />
     <ClCompile Include="Schmitt_FINAL.cpp" />
     <ClCompile Include="UI\Menu.cpp" />
     <ClCompile Include="UI\MenuItem.cpp" />
@@ -140,6 +141,7 @@
     <ClInclude Include="ItemsManager.hpp" />
     <ClInclude Include="json.hpp" />
     <ClInclude Include="Item.hpp" />
+    <ClInclude Include="ProductManager.hpp" />
     <ClInclude Include="UI\Menu.hpp" />
     <ClInclude Include="UI\MenuItem.hpp" />
     <ClInclude Include="UI\MenuOption.hpp" />

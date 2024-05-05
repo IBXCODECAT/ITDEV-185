@@ -9,7 +9,7 @@
 constexpr auto ERROR_DISPLAY_TIME_MS = 1000;
 
 Menu::Menu() {
-    root = new MenuItem("Root");
+    root = new MenuItem("Please select an option:\n");
     current = root;
     previous = nullptr;
     menuStack.push(root);
@@ -41,18 +41,17 @@ void Menu::display() {
 
     if (menuStack.size() > 1) {
         std::cout << "[0] Go Back" << std::endl;
-        index++;
     }
 
     for (MenuItem* child : current->children) {
         
         if (child->isOption())
         {
-            std::cout << '[' << index << "] Option - " << child->label << std::endl;
+            std::cout << '[' << index << "] Select - " << child->label << std::endl;
         }
         else
         {
-            std::cout << '[' << index << "] Menu - " << child->label << std::endl;
+            std::cout << '[' << index << "] Enter - " << child->label << std::endl;
         }
 
         index++;
@@ -68,12 +67,15 @@ void Menu::navigate(int choice) {
         return;
     }
 
+    // If the user chooses to go back and the menu stack has more than one item in it go back
     if (choice == 0 && menuStack.size() > 1) {
         goBack();
     }
+    // Otherwise, if the choice is within the range of the current menu's children, process the option
     else if (choice >= 1 && choice <= current->children.size()) {
         processOption(choice);
     }
+    // Otherwise, display an error message
     else {
         printError("Invalid choice! Please enter a valid number corresponding to a menu option.");
         std::this_thread::sleep_for(std::chrono::milliseconds(ERROR_DISPLAY_TIME_MS));
@@ -94,6 +96,11 @@ void Menu::printError(const std::string message) {
 }
 
 void Menu::goBack() {
+
+    if (menuStack.size() <= 1) {
+		return;
+	}
+
     menuStack.pop();
     current = menuStack.top();
     previous = menuStack.size() > 1 ? menuStack.top() : nullptr;

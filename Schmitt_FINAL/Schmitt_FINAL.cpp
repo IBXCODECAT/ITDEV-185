@@ -1,83 +1,153 @@
+// Include C++_lang standard headers
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <thread>
 
-// Include the nlohmann JSON headers
+// Include local headers
 #include "json.hpp"
 #include "Item.hpp"
 #include "ItemParser.hpp"
 #include "ItemsManager.hpp"
-
+#include "ProductManager.hpp"
 #include "./UI/Menu.hpp";
 
+// Define constants
+constexpr bool DEBUG_FLAG = false;
+constexpr short THREAD_SLEEP_TIME_MS = 100;
+
+// Use the standard namespace
 using namespace std;
+// Use the nlohmann json namespace
 using json = nlohmann::json;
 
+// Define global variables
+static Menu menu;
+static bool MenuProgressionEnabled = true;
 
-void option1Callback() {
-    cout << "Option 1 selected" << endl;
-    exit(0);
+/// <summary>
+/// Function to display a message and wait for user input
+/// Primarily used for debugging purposes, to pause the console output
+/// </summary>
+static void waitForInput() {
+    std::cout << "Enter [0] to Continue...";
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Clear input buffer
+    std::cin.get(); // Wait for user to press any key
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Clear input buffer
+    
+    // If the DEBUG_FLAG is set to false, allow the user to continue
+    if (!DEBUG_FLAG) MenuProgressionEnabled = true;
 }
 
-void option2Callback() {
-    cout << "Option 2 selected" << endl;
-    exit(0);
+/// <summary>
+/// Synchronous callback wrapper for the ProductManager::listProducts() function
+/// </summary>
+static void oCallbackWrapperListProducts()
+{
+	MenuProgressionEnabled = false;
+	ProductManager::listProducts();
+    waitForInput();
 }
 
-void option3Callback() {
-    cout << "Option 3 selected" << endl;
-    exit(0);
+/// <summary>
+/// Synchronous callback wrapper for the ProductManager::addProduct() function
+/// </summary>
+static void oCallbackWrapperCreateProduct()
+{ 
+    MenuProgressionEnabled = false;
+    ProductManager::addProduct();
+    waitForInput();
 }
 
-void option4Callback() {
-    cout << "Option 4 selected" << endl;
-    exit(0);
+/// <summary>
+/// Synchronous callback wrapper for the ProductManager::updateProduct() function
+/// </summary>
+static void oCallbackWrapperUpdateProduct()
+{
+    MenuProgressionEnabled = false;
+    ProductManager::updateProduct();
+    waitForInput();
 }
 
-void ConstructMenu(Menu& menu) {
+/// <summary>
+/// Syncrhonous callback wrapper for the ProductManager::removeProduct() function
+/// </summary>
+static void oCallbackWrapperDeleteProduct()
+{
+    MenuProgressionEnabled = true;
+    ProductManager::removeProduct();
+    waitForInput();
+}
+
+/// <summary>
+/// Syncrhonous callback wrapper for the ProductManager::SaveProducts() function
+/// </summary>
+static void oCallbackSaveProducts()
+{
+    MenuProgressionEnabled = true;
+    ProductManager::saveProducts();
+    waitForInput();
+}
+
+/// <summary>
+/// Responsible for constructing the menu structure and adding options to the menu
+/// </summary>
+static void ConstructMenu()
+{
 	menu.addChild("Shopping Mode");
 	menu.addChild("Store Mode");
+    menu.addOption("Close Application", []() { exit(0); });
 
-	menu.navigate(1); // Navigate to the first child
+	menu.navigate(1); // Navigate to ADD ITEM(S) TO CART
+    menu.addOption("Add item(s) to the cart.", waitForInput);
+    menu.addOption("Remove item(s) from the cart.", waitForInput);
+    menu.addOption("List all availible products.", waitForInput);
+    menu.addOption("Finish & Pay.", waitForInput);
 
-	menu.addChild("Add item(s) to Cart");
-	menu.addChild("Remove item(s) from Cart");
-	menu.addChild("List all availible products");
-	menu.addChild("Finish & Pay");
+	menu.goBack(); // Navigate back to SHOPPING MODE
+	menu.goBack(); // Navigate back to the root menu
 
-	menu.navigate(1); // Navigate to the first child
-	menu.addChild("Scan by Id");
-	menu.addChild("Scan by Name");
+	menu.navigate(2); // Navigate to STORE MODE
 
-	menu.goBack();
-
-	menu.goBack(); // Go back to the parent menu
-	menu.navigate(2); // Navigate to the second child
-
-    menu.addOption("Update product metadata (eg. Price, Discounts, etc)", option1Callback);
-    menu.addOption("Create a product.", option2Callback);
-    menu.addOption("Delete a product.", option3Callback);
-    menu.addOption("Save my changes.", option4Callback);
+    menu.addOption("List all products.", oCallbackWrapperListProducts);
+    menu.addOption("Create a product.", oCallbackWrapperCreateProduct);
+    menu.addOption("Update product metadata (eg. Price, Discounts, etc)", oCallbackWrapperUpdateProduct);
+    menu.addOption("Delete a product.", oCallbackWrapperDeleteProduct);
+    menu.addOption("Save my changes.", oCallbackSaveProducts);
 
 	menu.goBack();
 }
 
-int main() {
-    
-    Menu menu;
+/// <summary>
+/// Entry point for the application - main function
+/// </summary>
+/// <returns>Windows Application Exit code</returns>
+int main()
+{
+    // Initialize the menu structure
+    ConstructMenu();
 
-    bool exitSystem = false;
-    
-    ConstructMenu(menu);
+    // Initialize the items manager
+    ItemsManager::initialize();
 
     int choice;
 
-    while (!exitSystem)
+    // Main menu loop
+    while (true)
     {
+        // Display the menu and get the user's choice
         menu.display();
-        std::cout << "Enter your choice: ";
+        std::cout << "\nEnter your choice: ";
         std::cin >> choice;
 
+        // Wait for the current operation to finish before proceeding if one exists...
+        while (!MenuProgressionEnabled)
+        {
+            if (DEBUG_FLAG) std::cout << "Please wait for the current operation to finish..." << std::endl;
+			std::this_thread::sleep_for(std::chrono::milliseconds(THREAD_SLEEP_TIME_MS));
+        }
+
+        // Process the user's choice
         menu.navigate(choice);
     }
 

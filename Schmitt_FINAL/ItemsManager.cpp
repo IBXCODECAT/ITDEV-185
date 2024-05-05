@@ -1,4 +1,5 @@
 #include "ItemsManager.hpp"
+#include <iostream>
 
 std::vector<Item> ItemsManager::items;
 
@@ -20,16 +21,6 @@ void ItemsManager::removeItem(const std::string& itemName) {
         }), items.end());
 }
 
-void ItemsManager::updateItem(const Item& item) {
-    // Update an item in the global items vector
-    for (Item& currentItem : items) {
-        if (currentItem.itemName == item.itemName) {
-            currentItem = item;
-            return;
-        }
-    }
-}
-
 std::vector<Item> ItemsManager::getAllItems() {
     // Retrieve all items from the global items vector
     return items;
@@ -37,12 +28,16 @@ std::vector<Item> ItemsManager::getAllItems() {
 
 void ItemsManager::saveItemsToFile() {
     
+
     // Clear the items directory
     ItemParser::purgeItemsDirectory();
+
+    std::cout << "Saving items to files..." << std::endl;
 
     // Save the current vector of items to files
     for (const Item& item : items) {
         ItemParser::writeToFile(item);
+        std::cout << "Saved item: " << item.itemName << std::endl;
     }
 }
 
