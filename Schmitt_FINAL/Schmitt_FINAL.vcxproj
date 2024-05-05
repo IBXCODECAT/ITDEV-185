@@ -131,12 +131,16 @@
     <ClCompile Include="ItemParser.cpp" />
     <ClCompile Include="ItemsManager.cpp" />
     <ClCompile Include="Schmitt_FINAL.cpp" />
+    <ClCompile Include="UI\Menu.cpp" />
+    <ClCompile Include="UI\MenuItem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ItemParser.hpp" />
     <ClInclude Include="ItemsManager.hpp" />
     <ClInclude Include="json.hpp" />
     <ClInclude Include="Item.hpp" />
+    <ClInclude Include="UI\Menu.hpp" />
+    <ClInclude Include="UI\MenuItem.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

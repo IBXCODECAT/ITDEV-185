@@ -15,8 +15,8 @@
 #define MKDIR(directory) mkdir(directory, 0777)
 #endif
 
-#define ITEMS_SUBDIRECTORY "items"
-#define DEBUG_FLAG false
+constexpr auto ITEMS_SUBDIRECTORY = "items";
+constexpr bool DEBUG_FLAG = false;
 
 using namespace std;
 using json = nlohmann::json;
@@ -160,7 +160,7 @@ void ItemParser::purgeItemsDirectory() {
                     std::cerr << "Error deleting file: " << filePath << std::endl;
                 }
                 else {
-                    std::cout << "Removed file: " << filePath << std::endl;
+                    if (DEBUG_FLAG) std::cout << "Removed file: " << filePath << std::endl;
                 }
             }
         } while (FindNextFileA(hFind, &fileData) != 0);
@@ -171,5 +171,5 @@ void ItemParser::purgeItemsDirectory() {
         std::cerr << "Error opening directory: " << directoryPath << std::endl;
     }
 
-    std::cout << "Items directory cleared." << std::endl;
+    if (DEBUG_FLAG) std::cout << "Items directory cleared." << std::endl;
 }

@@ -8,6 +8,7 @@ void ItemsManager::initialize() {
 }
 
 void ItemsManager::addItem(const Item& item) {
+
     // Add an item to the global items vector
     items.push_back(item);
 }
@@ -36,7 +37,9 @@ std::vector<Item> ItemsManager::getAllItems() {
 
 void ItemsManager::saveItemsToFile() {
     
-    
+    // Clear the items directory
+    ItemParser::purgeItemsDirectory();
+
     // Save the current vector of items to files
     for (const Item& item : items) {
         ItemParser::writeToFile(item);

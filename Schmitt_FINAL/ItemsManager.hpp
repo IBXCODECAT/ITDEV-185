@@ -9,6 +9,7 @@
 
 class ItemsManager {
 public:
+
     /// <summary>
     /// Initialize the items manager by reading all saved items from the item parser
     /// </summary>
