@@ -3,19 +3,25 @@
 void ShoppingManager::addItems()
 {
     std::string itemName;
-    int itemCount;
+    int requestedItemCount;
 
     // Prompt user for item name and count
     std::cout << "Enter item name: ";
     std::cin >> itemName;
     std::cout << "Enter item count: ";
-    std::cin >> itemCount;
+    std::cin >> requestedItemCount;
 
     // Find the item from the items list
     Item* item = ItemsManager::findItem(itemName);
     if (item != nullptr) {
-        Cart::addItem(*item, itemCount);
-        std::cout << "Added " << itemCount << " " << itemName << "(s) to the cart." << std::endl;
+        unsigned int actualItemCount = Cart::addItems(*item, requestedItemCount);
+        std::cout << "Added " << actualItemCount << " " << itemName << "(s) to the cart." << std::endl;
+
+		if (actualItemCount < requestedItemCount) {
+			int itemCountDifference = requestedItemCount - actualItemCount;
+
+			std::cout << itemName << " is now out of stock! You currently have " << itemCountDifference << " less of them in your cart than initially requested!" << std::endl;
+		}
     }
     else {
         std::cout << "Item not found! Try checking the list of availible items or adding an item yourself in STORE MODE!" << std::endl;

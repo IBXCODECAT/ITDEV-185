@@ -1,11 +1,18 @@
 #pragma once
+// Compile guard to prevent multiple includes for compilers that do not support #pragma once
 #ifndef JSONPARSER_H
 #define JSONPARSER_H
 
-#include <string>  // Include the string header
+// Include statements
+#include <string>
+
+// Include local headers
 #include "Item.hpp"
 
-class ItemParser {
+/// <summary>
+/// Utility class to read and write items to and from files
+/// </summary>
+static class ItemParser {
 public:
 
     /// <summary>
@@ -33,7 +40,16 @@ public:
     static void purgeItemsDirectory();
 
 private:
+    /// <summary>
+	/// Ensure that the items directory exists to prevent file I/O errors
+    /// </summary>
     static void ensureItemsDirectoryExists();
+
+    /// <summary>
+	/// Verify if a directory exists to prevent file I/O errors
+    /// </summary>
+    /// <param name="directory">The directory to check</param>
+    /// <returns>True if the directory exists</returns>
     static bool directoryExists(const std::string& directory);  // Specify std::string
 };
 

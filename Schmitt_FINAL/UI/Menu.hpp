@@ -1,15 +1,18 @@
 #pragma once
+// Compile guard to prevent multiple includes for compilers that do not support #pragma once
 #ifndef MENU_H
 #define MENU_H
 
+// Include statements
+#include <stack>
+
+// Include local headers
 #include "MenuItem.hpp"
 #include "MenuOption.hpp"
 
-#include <stack>
-
-/**
- * @brief Class representing a menu.
- */
+/// <summary>
+/// Class to represent a menu.
+/// </summary>
 class Menu {
 private:
     MenuItem* root; /**< Pointer to the root menu item. */
@@ -17,56 +20,56 @@ private:
     MenuItem* previous; /**< Pointer to the previous menu item. */
     std::stack<MenuItem*> menuStack; /**< Stack to track menu navigation. */
 
-    /**
-     * @brief Prints an error message.
-     * @param message The error message to be printed.
-     */
+    /// <summary>
+	/// Prints an error message.
+    /// </summary>
+    /// <param name="message">The error message to be printed</param>
     void printError(const std::string message);
 
-    /**
-     * @brief Processes the selected option.
-     * @param choice The user's choice.
-     */
+    /// <summary>
+	/// Processes the selected option.
+    /// </summary>
+    /// <param name="choice">The user's choice</param>
     void processOption(int choice);
 
 public:
-    /**
-     * @brief Default constructor.
-     */
+    /// <summary>
+	/// Default constructor.
+    /// </summary>
     Menu();
 
-    /**
-     * @brief Destructor.
-     */
+    /// <summary>
+	/// Destructor.
+    /// </summary>
     ~Menu();
 
-    /**
-     * @brief Adds a child menu item.
-     * @param label The label of the child menu item.
-     */
+    /// <summary>
+	/// Adds a child menu item.
+    /// </summary>
+    /// <param name="label">The label of the child menu item</param>
     void addChild(std::string label);
 
-    /**
-     * @brief Adds an option with a callback function.
-     * @param label The label of the option.
-     * @param cb The callback function associated with the option.
-     */
+    /// <summary>
+	/// Adds an option with a callback function.
+    /// </summary>
+    /// <param name="label">The label ;of the option</param>
+    /// <param name="cb">The callback function to associate with the option when it is selected</param>
     void addOption(std::string label, MenuOption::Callback cb);
 
-    /**
-     * @brief Displays the current menu.
-     */
+    /// <summary>
+	/// Displays the menu at its current state.
+    /// </summary>
     void display();
 
-    /**
-     * @brief Navigates to the selected menu item.
-     * @param choice The user's choice.
-     */
+    /// <summary>
+	/// Navigates to the selected menu item.
+    /// </summary>
+    /// <param name="choice">The user's choice</param>
     void navigate(int choice);
 
-    /**
-     * @brief Navigates to the previous menu.
-     */
+    /// <summary>
+	/// Navigate to the previous menu.
+    /// </summary>
     void goBack();
 };
 

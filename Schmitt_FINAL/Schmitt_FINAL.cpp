@@ -92,15 +92,12 @@ static void finishAndPayWrapper()
 	MenuProgressionEnabled = false;
     ShoppingManager::finishAndPay();
 
-    waitForInput();
-
     // Here we save the products to the file after the user has finished shopping in oreder to update the stock counts
     ProductManager::saveProducts();
 
     cout << "\n\nThank you for shopping with us! Have a great day!\n\n";
 
-    // When we finish shopping, we exit the application
-    exit(1);
+    waitForInput();
 }
 
 /// <summary>
@@ -152,11 +149,14 @@ static void saveProductsWrapper()
 /// </summary>
 static void ConstructMenu()
 {
+	// Add the main menu options
 	menu.addChild("Shopping Mode");
 	menu.addChild("Store Mode");
     menu.addOption("Close Application", []() { exit(0); });
 
 	menu.navigate(1); // Navigate to ADD ITEM(S) TO CART
+
+	// Add the shopping menu options
     menu.addOption("View cart.", cartDisplayWrapper);
     menu.addOption("Add item(s) to the cart.", cartItemAddWrapper);
     menu.addOption("Remove item(s) from the cart.", cartItemRemoveWrapper);
@@ -165,9 +165,9 @@ static void ConstructMenu()
 
 	menu.goBack(); // Navigate back to SHOPPING MODE
 	menu.goBack(); // Navigate back to the root menu
-
 	menu.navigate(2); // Navigate to STORE MODE
 
+	// Add the store menu options
     menu.addOption("List all products.", listProductsWrapper);
     menu.addOption("Create a product.", createProductWrapper);
     menu.addOption("Update product metadata (eg. Price, Discounts, etc).", updateProductWrapper);

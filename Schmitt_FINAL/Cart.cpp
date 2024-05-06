@@ -7,8 +7,17 @@
 
 static std::vector<Item> cart; // List of items in the cart
 
-void Cart::addItem(Item& item, int itemCount)
+constexpr bool DEBUG_FLAG = false;
+
+void Cart::Clear()
 {
+    cart.clear();
+}
+
+unsigned int Cart::addItems(Item& item, int itemCount)
+{
+	unsigned int itemsAdded = 0;
+
     for (int i = 0; i < itemCount; i++)
     {
         if (item.stockCount > 0)
@@ -17,14 +26,16 @@ void Cart::addItem(Item& item, int itemCount)
 
             // Decrease the stock count of the item as it is added to the cart
             item.stockCount--;
+			itemsAdded++;
         }
         else
         {
-			std::cout << "Item out of stock: " << item.itemName << std::endl;
+			if (DEBUG_FLAG) std::cout << "Item out of stock: " << item.itemName << std::endl;
         }
     }
 
-    std::cout << "Item added to the cart: " << item.itemName << " (Count: " << itemCount << ")" << std::endl;
+    std::cout << "Item added to the cart: " << item.itemName << " (Count: " << itemsAdded << ")" << std::endl;
+    return itemsAdded;
 }
 
 void Cart::removeItem(std::string& itemName, int itemCount) {

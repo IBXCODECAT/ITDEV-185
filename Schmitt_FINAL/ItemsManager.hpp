@@ -1,13 +1,19 @@
 #pragma once
+// Compile guard to prevent multiple includes for compilers that do not support #pragma once
 #ifndef ITEMSMANAGER_H
 #define ITEMSMANAGER_H
 
+// Include statements
+#include <vector>
+
+// Include local headers
 #include "Item.hpp"
 #include "ItemParser.hpp"
 
-#include <vector>
-
-class ItemsManager {
+/// <summary>
+/// Utility class to manage items in the store
+/// </summary>
+static class ItemsManager {
 public:
 
     /// <summary>
@@ -38,7 +44,7 @@ public:
     /// Get all items from the global items vector
     /// </summary>
     /// <returns>All saved items</returns>
-    static std::vector<Item> getAllItems(); // Retrieve all items from the global items vector
+    static std::vector<Item> getAllItems();
 
     /// <summary>
     /// Saves the current vector of items to files using the item parser in the items directory
@@ -48,10 +54,13 @@ public:
     /// <summary>
     /// Delete all items from the global items vector
     /// </summary>
-    static void deleteAllItems(); // Delete all items from the global items vector
+    static void deleteAllItems();
 
 private:
-    static std::vector<Item> items; // Global items vector
+    /// <summary>
+	/// Keeps track of all items in the store in memory (Global Items Vector)
+    /// </summary>
+    static std::vector<Item> items;
 };
 
 #endif // ITEMSMANAGER_H
