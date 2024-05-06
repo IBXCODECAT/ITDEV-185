@@ -1,12 +1,15 @@
+// Include headers
 #include <iostream>
 #include <fstream>
 #include <string>
 #include <vector>
 #include <Windows.h>
 
+// Include local headers
 #include "Item.hpp"
 #include "ItemParser.hpp"
 
+// Include windows.h for Windows-specific file I/O
 #ifdef _WIN32
 #include <direct.h> // For Windows
 #define MKDIR(directory) _mkdir(directory)
@@ -15,9 +18,11 @@
 #define MKDIR(directory) mkdir(directory, 0777)
 #endif
 
+// Constants for the items subdirectory and debug flag
 constexpr auto ITEMS_SUBDIRECTORY = "items";
 constexpr bool DEBUG_FLAG = false;
 
+// Namespace aliases
 using namespace std;
 using json = nlohmann::json;
 
@@ -153,10 +158,13 @@ void ItemParser::purgeItemsDirectory() {
     if (hFind != INVALID_HANDLE_VALUE) {
         do {
             const std::string filename = fileData.cFileName;
-            if (filename != "." && filename != "..") {
+            if (filename != "." && filename != "..")
+            {
                 const std::string filePath = directoryPath + "\\" + filename;
-                std::cout << "Removing file: " << filePath << std::endl;
-                if (DeleteFileA(filePath.c_str()) == 0) {
+                if (DEBUG_FLAG) std::cout << "Removing file: " << filePath << std::endl;
+                
+                if (DeleteFileA(filePath.c_str()) == 0)
+                {
                     std::cerr << "Error deleting file: " << filePath << std::endl;
                 }
                 else {

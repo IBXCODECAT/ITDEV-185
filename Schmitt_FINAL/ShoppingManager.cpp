@@ -1,4 +1,9 @@
+// Include local headers
 #include "ShoppingManager.hpp"
+#include "ProductManager.hpp"
+
+// Use the standard namespace
+using namespace std;
 
 void ShoppingManager::addItems()
 {
@@ -49,5 +54,15 @@ void ShoppingManager::listItems()
 
 void ShoppingManager::finishAndPay()
 {
+	// Print the receipt
 	Cart::printReceipt();
+
+	// Save the products
+	ProductManager::saveProducts();
+
+	// Clear the cart
+	Cart::Clear();
+
+	// Output a thank you message
+    cout << "\n\nThank you for shopping with us! Have a great day!\n\n";
 }

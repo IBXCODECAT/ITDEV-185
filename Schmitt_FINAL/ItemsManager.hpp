@@ -17,6 +17,11 @@ static class ItemsManager {
 public:
 
     /// <summary>
+	/// Items in the store
+    /// </summary>
+    static std::vector<Item> items;
+
+    /// <summary>
     /// Initialize the items manager by reading all saved items from the item parser
     /// </summary>
     static void initialize(); // Initialize the items manager
@@ -41,12 +46,6 @@ public:
     static void removeItem(const std::string& itemName);
 
     /// <summary>
-    /// Get all items from the global items vector
-    /// </summary>
-    /// <returns>All saved items</returns>
-    static std::vector<Item> getAllItems();
-
-    /// <summary>
     /// Saves the current vector of items to files using the item parser in the items directory
     /// </summary>
     static void saveItemsToFile();
@@ -55,12 +54,6 @@ public:
     /// Delete all items from the global items vector
     /// </summary>
     static void deleteAllItems();
-
-private:
-    /// <summary>
-	/// Keeps track of all items in the store in memory (Global Items Vector)
-    /// </summary>
-    static std::vector<Item> items;
 };
 
 #endif // ITEMSMANAGER_H

@@ -91,12 +91,6 @@ static void finishAndPayWrapper()
 {
 	MenuProgressionEnabled = false;
     ShoppingManager::finishAndPay();
-
-    // Here we save the products to the file after the user has finished shopping in oreder to update the stock counts
-    ProductManager::saveProducts();
-
-    cout << "\n\nThank you for shopping with us! Have a great day!\n\n";
-
     waitForInput();
 }
 
@@ -145,6 +139,17 @@ static void saveProductsWrapper()
 }
 
 /// <summary>
+/// Syncrhonous callback wrapper for the ProductManager::discountCategory() function
+/// This function is used to effectively wrap the asynchronous function call in a synchronous one
+/// </summary>
+static void discountCategoryWrapper()
+{
+	MenuProgressionEnabled = true;
+	ProductManager::discountCategory();
+	waitForInput();
+}
+
+/// <summary>
 /// Responsible for constructing the menu structure and adding options to the menu
 /// </summary>
 static void ConstructMenu()
@@ -168,13 +173,29 @@ static void ConstructMenu()
 	menu.navigate(2); // Navigate to STORE MODE
 
 	// Add the store menu options
+    menu.addChild("Manage Discounts");
+	menu.addChild("Product Management");
     menu.addOption("List all products.", listProductsWrapper);
+
+	menu.navigate(1); // Navigate to MANAGE DISCOUNTS
+
+    // Add the discount menu options
+    menu.addOption("Discount by category (fixed).", discountCategoryWrapper);
+    menu.addOption("Discount by category (percentage).", discountCategoryWrapper);
+	menu.addOption("Save my changes.", saveProductsWrapper);
+
+	menu.goBack(); // Navigate back to STORE MODE
+	menu.navigate(2); // Navigate to PRODUCT MANAGEMENT
+
+	// Add the product management menu options
     menu.addOption("Create a product.", createProductWrapper);
-    menu.addOption("Update product metadata (eg. Price, Discounts, etc).", updateProductWrapper);
+    menu.addOption("Update product metadata (eg. price, etc).", updateProductWrapper);
     menu.addOption("Delete a product.", deleteProductWrapper);
     menu.addOption("Save my changes.", saveProductsWrapper);
 
-	menu.goBack();
+	menu.goBack(); // Navigate back to STORE MODE
+	menu.goBack(); // Navigate back to the root menu
+
 }
 
 /// <summary>

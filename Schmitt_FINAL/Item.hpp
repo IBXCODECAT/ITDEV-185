@@ -15,9 +15,29 @@
 /// </summary>
 class Item {
 public:
-    char itemName[100]; // Assuming a maximum length of 100 characters for the item name
+    /// <summary>
+	/// The name of the item (max 100 characters), must be unique
+    /// </summary>
+    char itemName[100];
+
+	/// <summary>
+	/// The category of the item (max 100 characters)
+	/// </summary>
+	char itemCategory[100];
+
+    /// <summary>
+	/// The stock count for this item
+    /// </summary>
     int stockCount;
+
+    /// <summary>
+	/// The price for this item
+    /// </summary>
     double itemPrice;
+
+    /// <summary>
+	/// The discounted price for this item
+    /// </summary>
     double itemDiscountPrice;
 
     /// <summary>
@@ -29,10 +49,11 @@ public:
 	/// Constructor to initialize the item with the given values
     /// </summary>
     /// <param name="itemName">The name for this item</param>
+	/// <param name="itemCategory">The category for this item</param>
     /// <param name="stockCount">The stock count for this item</param>
     /// <param name="itemPrice">The price for this item</param>
     /// <param name="itemDiscountPrice">The discounted price for this item</param>
-    Item(const char* itemName, int stockCount, double itemPrice, double itemDiscountPrice);
+    Item(const char* itemName, const char* itemCategory, int stockCount, double itemPrice, double itemDiscountPrice);
 
     /// <summary>
 	/// Parse the item from a JSON string representation and set the values

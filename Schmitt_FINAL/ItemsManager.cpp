@@ -1,7 +1,9 @@
 #include "ItemsManager.hpp"
 #include <iostream>
 
-std::vector<Item> ItemsManager::items;
+constexpr bool DEBUG_FLAG = false;
+
+std::vector<Item> ItemsManager::items; // List of all items in the store
 
 void ItemsManager::initialize() {
     // Get all items from the item parser and initialize the global items vector
@@ -31,23 +33,18 @@ void ItemsManager::removeItem(const std::string& itemName) {
         }), items.end());
 }
 
-std::vector<Item> ItemsManager::getAllItems() {
-    // Retrieve all items from the global items vector
-    return items;
-}
-
 void ItemsManager::saveItemsToFile() {
     
 
     // Clear the items directory
     ItemParser::purgeItemsDirectory();
 
-    std::cout << "Saving items to files..." << std::endl;
+    std::cout << "Saving changes to store inventory..." << std::endl;
 
     // Save the current vector of items to files
     for (const Item& item : items) {
         ItemParser::writeToFile(item);
-        std::cout << "Saved item: " << item.itemName << std::endl;
+        if (DEBUG_FLAG) std::cout << "Saved item: " << item.itemName << std::endl;
     }
 }
 

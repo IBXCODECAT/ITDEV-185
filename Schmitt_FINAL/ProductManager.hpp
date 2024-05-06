@@ -34,6 +34,16 @@ public:
 	/// Save the products to a file
 	/// </summary>
 	static void saveProducts();
+
+	/// <summary>
+	/// Delete all products from the store that fit the given category by some value
+	/// </summary>
+	static void discountCategory();
+
+	/// <summary>
+	/// Discount all products from the store that fit the given category by a percentage
+	/// </summary>
+	static void discountCategoryByPercentage();
 };
 
 #endif // PRODUCTMANAGER_H
