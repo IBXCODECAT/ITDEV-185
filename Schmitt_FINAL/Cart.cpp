@@ -1,12 +1,24 @@
+// Include headers
 #include <string>
 #include <vector>
+#include <map>
+#include <unordered_map>
+#include <iomanip>
 
+
+// Include local headers
 #include "Cart.hpp"
 #include "Item.hpp"
 #include "ItemsManager.hpp"
 
-static std::vector<Item> cart; // List of items in the cart
+/// <summary>
+/// List of items in the cart
+/// </summary>
+static std::vector<Item> cart;
 
+/// <summary>
+/// Debug flag to enable/disable debug messages
+/// </summary>
 constexpr bool DEBUG_FLAG = false;
 
 void Cart::Clear()
@@ -80,16 +92,41 @@ void Cart::printReceipt() {
         return;
     }
 
+    // Map to store item names and their quantities
+    std::unordered_map<std::string, int> itemQuantityMap;
+    for (const auto& item : cart) {
+        itemQuantityMap[item.itemName]++;
+    }
+
     std::cout << "Receipt:" << std::endl;
     std::cout << std::setw(20) << std::left << "Item" << std::setw(10) << std::left << "Quantity" << std::setw(10) << std::left << "Price" << std::endl;
     std::cout << std::string(40, '-') << std::endl;
 
-    double total = 0.0;
-    for (const auto& item : cart) {
-        std::cout << std::setw(20) << std::left << item.itemName << std::setw(10) << std::left << 1 << "$" << std::fixed << std::setprecision(2) << item.itemPrice << std::endl;
-        total += item.itemPrice;
+    double subtotal = 0.0;
+    for (auto it = itemQuantityMap.begin(); it != itemQuantityMap.end(); ++it) {
+        const std::string& itemName = it->first;
+        int quantity = it->second;
+        for (const auto& item : cart) {
+            if (item.itemName == itemName) {
+                std::cout << std::setw(20) << std::left << itemName << std::setw(10) << std::left << quantity << "$" << std::fixed << std::setprecision(2) << item.itemDiscountPrice << std::endl;
+                subtotal += item.itemPrice * quantity;
+                break;
+            }
+        }
     }
 
+    // Calculate sales tax (assuming 8%)
+    double salesTax = subtotal * 0.08;
+    // Calculate tip (20%)
+    double tip = subtotal * 0.20;
+
+    // Add sales tax and tip to subtotal to get total
+    double total = subtotal + salesTax + tip;
+
+    std::cout << std::string(40, '-') << std::endl;
+    std::cout << std::setw(30) << std::left << "Subtotal:" << "$" << std::fixed << std::setprecision(2) << subtotal << std::endl;
+    std::cout << std::setw(30) << std::left << "Sales Tax (8%):" << "$" << std::fixed << std::setprecision(2) << salesTax << std::endl;
+    std::cout << std::setw(30) << std::left << "Tip (20%):" << "$" << std::fixed << std::setprecision(2) << tip << std::endl;
     std::cout << std::string(40, '-') << std::endl;
     std::cout << std::setw(30) << std::left << "Total:" << "$" << std::fixed << std::setprecision(2) << total << std::endl;
 }

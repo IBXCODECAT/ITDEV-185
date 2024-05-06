@@ -36,7 +36,8 @@ public:
     double itemPrice;
 
     /// <summary>
-	/// The discounted price for this item
+	/// The price of the item after a the price has been fully calculated
+	/// (e.g. after applying discounts, etc.)
     /// </summary>
     double itemDiscountPrice;
 

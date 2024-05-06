@@ -167,7 +167,7 @@ static void ConstructMenu()
     menu.addOption("Remove item(s) from the cart.", cartItemRemoveWrapper);
     menu.addOption("List all availible products.", listProductsWrapper);
     menu.addOption("Finish & Pay.", finishAndPayWrapper);
-
+    
 	menu.goBack(); // Navigate back to SHOPPING MODE
 	menu.goBack(); // Navigate back to the root menu
 	menu.navigate(2); // Navigate to STORE MODE
